@@ -1,0 +1,11 @@
+title: Kalam.me
+description: Apprenez l'arabe en parlant avec un professeur IA
+theme: jekyll-theme-cayman
+google_analytics: 
+
+# Exclude files/folders
+exclude:
+  - README.md
+  - .gitignore
+  - Gemfile
+  - Gemfile.lock
