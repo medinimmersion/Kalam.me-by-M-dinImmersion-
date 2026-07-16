@@ -1,247 +1,586 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kalam.me 🎤</title>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--green:#0F5A43;--gold:#D4AF37;--sand:#F5F1E8;--ink:#1F2A26;--mute:#8D9691}
-html,body{min-height:100vh;background:var(--sand);color:var(--ink);font-family:'Inter';-webkit-tap-highlight-color:transparent}
-.app{max-width:480px;margin:0 auto;padding:20px;min-height:100vh}
-h1{font-family:'Baloo 2';font-weight:800;font-size:32px;color:var(--green);margin:20px 0 10px}
-.subtitle{font-size:14px;color:var(--mute);margin-bottom:20px}
-.lesson-card{background:#fff;border-radius:16px;padding:16px;margin:12px 0;box-shadow:0 4px 0 rgba(15,90,67,.1);cursor:pointer;transition:all .2s}
-.lesson-card:active{transform:translateY(4px);box-shadow:none}
-.lesson-card h3{color:var(--green);font-family:'Baloo 2';font-weight:700;margin-bottom:6px;font-size:16px}
-.lesson-card p{font-size:13px;color:var(--mute)}
-.vocab-item{background:#f9f9f9;border-radius:12px;padding:14px;margin:10px 0}
-.vocab-ar{font-family:'Baloo 2';font-weight:700;font-size:20px;color:var(--green);margin-bottom:4px}
-.vocab-tr{font-size:13px;font-family:'Baloo 2';font-weight:600;color:#0F5A43;margin-bottom:3px}
-.vocab-fr{font-size:12px;color:var(--mute)}
-.btn{width:100%;padding:16px;border:none;border-radius:14px;font-family:'Baloo 2';font-weight:700;font-size:16px;cursor:pointer;margin:12px 0;transition:all .08s}
-.btn:active{transform:translateY(4px);box-shadow:none!important}
-.btn-green{background:var(--green);color:#fff;box-shadow:0 5px 0 #0A3E2E}
-.btn-white{background:#fff;color:var(--ink);box-shadow:0 5px 0 #E3DCCB}
-.screen{display:none}
-.screen.active{display:block}
-.call-box{background:linear-gradient(160deg,#177253,#0F5A43);color:#fff;padding:20px;border-radius:16px;margin:20px 0}
-.prof-pic{width:150px;height:150px;border-radius:50%;border:5px solid var(--gold);margin:0 auto 16px;background:#fff;object-fit:cover}
-.prof-name{font-family:'Baloo 2';font-weight:800;font-size:22px;text-align:center;margin-bottom:4px}
-.prof-role{text-align:center;font-size:12px;color:var(--gold);margin-bottom:16px}
-.transcript{background:rgba(255,255,255,.15);border-radius:14px;padding:16px;margin:16px 0;font-size:14px;line-height:1.7;min-height:100px;max-height:200px;overflow-y:auto}
-.transcript strong{color:var(--gold);display:block;font-size:10px;letter-spacing:1px;margin-bottom:8px;font-family:'Baloo 2'}
-.mic-btn{width:90px;height:90px;border-radius:45px;background:var(--gold);border:none;color:var(--green);font-size:36px;cursor:pointer;margin:20px auto;display:block;box-shadow:0 6px 0 #A8861F;transition:all .08s;font-weight:bold}
-.mic-btn:active{transform:translateY(6px);box-shadow:none}
-.mic-btn.recording{background:#E8503A;color:#fff;box-shadow:0 6px 0 #A9351F;animation:pulse 1s infinite}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
-.status{text-align:center;font-size:12px;margin:12px 0;opacity:.85;font-family:'Baloo 2';font-weight:600}
-.hint{text-align:center;font-size:12px;color:rgba(255,255,255,.7);margin:8px 0;font-family:'Baloo 2'}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalam.me - Apprenez une langue en parlant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(180deg, #F5F1E8 0%, #FAFAF8 100%);
+      color: #1B5E39;
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: 60px;
+    }
+
+    .app-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(245,241,232,0.96) 100%);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(27, 94, 57, 0.08);
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(27, 94, 57, 0.06);
+    }
+
+    .header-branding {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .medin-logo {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #0F5A43;
+      white-space: nowrap;
+    }
+
+    .medin-logo img {
+      height: 24px;
+      width: auto;
+    }
+
+    .header-badge {
+      background: linear-gradient(135deg, #D4AF37 0%, #DAA520 100%);
+      color: #0F5A43;
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      box-shadow: 0 3px 10px rgba(212, 175, 55, 0.15);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .lang-selector {
+      display: flex;
+      gap: 6px;
+      margin-left: auto;
+    }
+
+    .lang-btn {
+      padding: 7px 12px;
+      border: 1.5px solid rgba(15, 90, 67, 0.25);
+      background: white;
+      color: #0F5A43;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: 'Baloo 2', sans-serif;
+      transition: all 0.15s ease;
+      box-shadow: 0 2px 0 rgba(15, 90, 67, 0.15);
+    }
+
+    .lang-btn.active {
+      background: linear-gradient(135deg, #0F5A43 0%, #157A5B 100%);
+      color: white;
+      border-color: #0F5A43;
+      box-shadow: 0 2px 0 #0A3D2E, 0 3px 8px rgba(15, 90, 67, 0.3);
+    }
+
+    .lang-btn:active {
+      transform: translateY(2px);
+      box-shadow: none;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 70px 20px 20px;
+      min-height: 100vh;
+    }
+
+    .hero {
+      position: relative;
+      background: linear-gradient(135deg, #F5F1E8 0%, #FAFAF8 100%);
+      border-radius: 20px;
+      padding: 30px 20px;
+      margin-bottom: 20px;
+      min-height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      overflow: hidden;
+      padding-bottom: 45px;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 25px;
+      background: #0F5A43;
+      clip-path: polygon(0 60%, 100% 0%, 100% 100%, 0% 100%);
+      z-index: 0;
+    }
+
+    .hero-character {
+      flex: 0 0 35%;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-character img {
+      width: 100%;
+      height: auto;
+      max-width: 150px;
+    }
+
+    .hero-content {
+      flex: 1;
+      padding-left: 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-badge {
+      background: linear-gradient(135deg, #D4AF37 0%, #DAA520 100%);
+      color: #0F5A43;
+      padding: 10px 20px;
+      border-radius: 50px;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      margin-bottom: 15px;
+      box-shadow: 0 3px 10px rgba(212, 175, 55, 0.15);
+    }
+
+    .logo-km {
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, #D4AF37 0%, #DAA520 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 50px;
+      font-family: 'Baloo 2', sans-serif;
+      color: #0F5A43;
+      font-weight: 800;
+      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.2);
+      margin: 0 auto 15px;
+    }
+
+    .hero-title {
+      font-size: 22px;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 800;
+      color: #0F5A43;
+      text-align: center;
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+
+    .hero-subtitle {
+      font-size: 13px;
+      color: #8D9691;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .welcome-card {
+      background: white;
+      border-radius: 24px;
+      padding: 30px 20px;
+      margin: 30px 0 20px;
+      box-shadow: 0 8px 30px rgba(27, 94, 57, 0.12);
+      text-align: center;
+      border-top: 8px solid #0F5A43;
+    }
+
+    .welcome-title {
+      font-size: 24px;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 800;
+      color: #0F5A43;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .welcome-title .arrow {
+      font-size: 20px;
+    }
+
+    .welcome-subtitle {
+      font-size: 14px;
+      color: #8D9691;
+      margin-bottom: 25px;
+      line-height: 1.6;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 25px;
+    }
+
+    .feature {
+      background: linear-gradient(180deg, #FDFCFA 0%, #F5F1E8 100%);
+      padding: 20px 12px;
+      border-radius: 18px;
+      border: 1.5px solid rgba(15, 90, 67, 0.1);
+      text-align: center;
+      transition: all 0.2s ease;
+      box-shadow: 0 3px 0 rgba(15, 90, 67, 0.08);
+    }
+
+    .feature:active {
+      transform: translateY(3px);
+      box-shadow: none;
+      border-color: rgba(212, 175, 55, 0.5);
+    }
+
+    .feature-icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+      width: 60px;
+      height: 60px;
+      background: rgba(15, 90, 67, 0.05);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .feature-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0F5A43;
+      font-family: 'Baloo 2', sans-serif;
+      margin-bottom: 8px;
+    }
+
+    .feature-text {
+      font-size: 12px;
+      color: #8D9691;
+      line-height: 1.4;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 18px 24px;
+      background: linear-gradient(135deg, #0F5A43 0%, #157A5B 50%, #0F5A43 100%);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 17px;
+      cursor: pointer;
+      margin: 20px 0;
+      box-shadow: 0 6px 0 #0A3D2E, 0 12px 25px rgba(15, 90, 67, 0.35);
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+      letter-spacing: 0.3px;
+      border: 2px solid rgba(212, 175, 55, 0.4);
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+      animation: shine 3s ease-in-out infinite;
+    }
+
+    @keyframes shine {
+      0% { left: -100%; }
+      50%, 100% { left: 150%; }
+    }
+
+    .btn-primary:active {
+      transform: translateY(5px);
+      box-shadow: 0 1px 0 #0A3D2E, 0 4px 10px rgba(15, 90, 67, 0.25);
+    }
+
+    .btn-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #D4AF37 0%, #DAA520 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      flex-shrink: 0;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: white;
+      border-top: 1px solid rgba(27, 94, 57, 0.08);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      color: #8D9691;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .nav-item.active {
+      color: #0F5A43;
+    }
+
+    .nav-item-icon {
+      font-size: 24px;
+    }
+
+    .nav-item:active {
+      transform: scale(0.9);
+    }
+  </style>
 </head>
 <body>
-<div class="app">
-
-<!-- LEÇONS -->
-<div class="screen active" id="lessonsScreen">
-  <h1>🎤 Kalam.me</h1>
-  <p class="subtitle">Apprenez l'arabe en parlant</p>
-  
-  <div class="lesson-card" onclick="selectLesson(0)">
-    <h3>Salutations</h3>
-    <p>السلام عليكم • Saluez en arabe</p>
-  </div>
-  
-  <div class="lesson-card" onclick="selectLesson(1)">
-    <h3>Se présenter</h3>
-    <p>من أين أنت؟ • Dites d'où vous venez</p>
-  </div>
-  
-  <div class="lesson-card" onclick="selectLesson(2)">
-    <h3>Lire le Coran</h3>
-    <p>بسم الله الرحمن الرحيم • Prononcez la Basmala</p>
-  </div>
-</div>
-
-<!-- VOCABULAIRE -->
-<div class="screen" id="vocabScreen">
-  <button class="btn btn-white" onclick="go('lessons')">← Retour</button>
-  <h2 style="font-family:'Baloo 2';font-size:20px;color:var(--green);margin:20px 0">Vocabulaire</h2>
-  <div id="vocabList"></div>
-  <button class="btn btn-green" onclick="startCall()">Commencer l'appel 🎤</button>
-</div>
-
-<!-- APPEL -->
-<div class="screen" id="callScreen">
-  <button class="btn btn-white" onclick="endCall()">← Retour</button>
-  <div class="call-box">
-    <img src="https://dnznrvs05pmza.cloudfront.net/gemini/gemini-3-pro-image/images/95f1f2fa-9a6d-435c-9260-feefca2b11e0/Portrait_professionnel_d_un_homme_d__ge_moyen__m_tisse__v_tu.png" class="prof-pic" alt="Abou Adam">
-    <div class="prof-name">Abou Adam</div>
-    <div class="prof-role">Professeur d'arabe littéraire</div>
-    
-    <div class="transcript">
-      <strong>PROFESSEUR</strong>
-      <span id="transcriptText">Bonjour! Commençons la leçon...</span>
+  <div class="app-header">
+    <div class="header-branding">
+      <div class="medin-logo">
+        <span>by</span>
+        <img src="logo-medin.png" alt="Médin Immersion">
+      </div>
+      <div class="header-badge">
+        <span>✨</span>
+        <span>Kalam.me</span>
+        <span>✨</span>
+      </div>
     </div>
-    
-    <button class="mic-btn" id="micBtn" onclick="toggleMic()">🎤</button>
-    <div class="hint" id="hint">Appuyez pour parler</div>
-    <div class="status" id="status"></div>
-  </div>
-</div>
-
-</div>
-
-<script>
-const LESSONS = [
-  {
-    title: 'Salutations',
-    vocab: [
-      { ar: 'السلام عليكم', tr: 'Assalam alaykoum', fr: 'Que la paix soit sur vous' },
-      { ar: 'صباح الخير', tr: 'Sabah al-khair', fr: 'Bonjour (matin)' },
-      { ar: 'مساء الخير', tr: 'Masa al-khair', fr: 'Bonsoir' },
-      { ar: 'وداعا', tr: 'Wada\'an', fr: 'Au revoir' }
-    ]
-  },
-  {
-    title: 'Se présenter',
-    vocab: [
-      { ar: 'من أين أنت؟', tr: 'Man ayna anta?', fr: 'D\'où venez-vous?' },
-      { ar: 'أنا من', tr: 'Ana min', fr: 'Je viens de' },
-      { ar: 'اسمي', tr: 'Ismi', fr: 'Mon nom' }
-    ]
-  },
-  {
-    title: 'Basmala',
-    vocab: [
-      { ar: 'بسم الله الرحمن الرحيم', tr: 'Bismillah ar-rahman ar-rahim', fr: 'Au nom de Dieu, le Miséricordieux' },
-      { ar: 'الحمد لله', tr: 'Al-hamdu lillah', fr: 'Louange à Dieu' }
-    ]
-  }
-];
-
-const API_KEY = 'AQ.Ab8RN6I_U7pAy2ZL6VY2f_nKHiawfWuoMjTbgdpT2rmF6IKsGA';
-let currentLesson = null;
-
-function go(screen) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(screen + 'Screen').classList.add('active');
-  window.scrollTo(0, 0);
-}
-
-function selectLesson(index) {
-  currentLesson = LESSONS[index];
-  const vocabHtml = currentLesson.vocab.map(v => `
-    <div class="vocab-item">
-      <div class="vocab-ar">${v.ar}</div>
-      <div class="vocab-tr">${v.tr}</div>
-      <div class="vocab-fr">${v.fr}</div>
+    <div class="lang-selector">
+      <button class="lang-btn active" onclick="changeLang('fr')">FR</button>
+      <button class="lang-btn" onclick="changeLang('en')">EN</button>
+      <button class="lang-btn" onclick="changeLang('ar')">AR</button>
     </div>
-  `).join('');
-  document.getElementById('vocabList').innerHTML = vocabHtml;
-  go('vocab');
-}
+  </div>
 
-function startCall() {
-  go('callScreen');
-  setTimeout(() => {
-    speak(`السلام عليكم! Bonjour! Bienvenue à la leçon: ${currentLesson.title}. Prêt à parler?`);
-  }, 500);
-}
+  <div class="container">
+    <div class="hero">
+      <div class="hero-character">
+        <img src="characters.png" alt="Professeur" style="width: 100%; max-width: 140px;">
+      </div>
+      <div class="hero-content">
+        <div class="logo-km">KM</div>
+        <div class="hero-title" id="heroTitle">L'APPRENTISSAGE EN ACTION</div>
+        <div class="hero-subtitle" id="heroSubtitle">Apprenez, pratiquez, progressez chaque jour</div>
+      </div>
+    </div>
 
-function endCall() {
-  try { window.speechSynthesis?.cancel(); } catch (e) {}
-  go('lessons');
-}
+    <div class="welcome-card">
+      <div class="welcome-title">
+        <span class="arrow">✨</span>
+        <span id="welcomeTitle">Bienvenue</span>
+        <span class="arrow">✨</span>
+      </div>
+      <div class="welcome-subtitle" id="welcomeSubtitle">
+        Apprenez les langues avec l'IA • 8 langues disponibles
+      </div>
+      
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon">🎤</div>
+          <div class="feature-title" id="feature1Title">Discutez avec votre professeur IA</div>
+          <div class="feature-text" id="feature1Text">Dialoguez naturellement et améliorez votre fluidité</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">📚</div>
+          <div class="feature-title" id="feature2Title">Des leçons adaptées à votre niveau</div>
+          <div class="feature-text" id="feature2Text">Contenus personnalisés pour progresser à votre rythme</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🌍</div>
+          <div class="feature-title" id="feature3Title">8 langues disponibles</div>
+          <div class="feature-text" id="feature3Text">Apprenez parmi 8 langues différentes</div>
+        </div>
+      </div>
+    </div>
 
-function speak(text) {
-  try {
-    const u = new SpeechSynthesisUtterance(text);
-    const voices = window.speechSynthesis?.getVoices?.() || [];
-    const arVoice = voices.find(v => v.lang?.startsWith('ar')) || voices[0];
-    if (arVoice) u.voice = arVoice;
-    u.rate = 0.85;
-    u.onstart = () => document.getElementById('hint').textContent = 'Le prof parle...';
-    u.onend = () => document.getElementById('hint').textContent = 'Appuyez pour parler';
-    window.speechSynthesis?.speak(u);
-  } catch (e) {}
-}
+    <button class="btn-primary" onclick="startApp()">
+      <div class="btn-icon">✨</div>
+      <span id="btnStart">Commencer mon apprentissage</span>
+      <div class="btn-icon">→</div>
+    </button>
+  </div>
 
-function toggleMic() {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) {
-    alert('Microphone non supporté');
-    return;
-  }
-  
-  const rec = new SR();
-  rec.lang = 'ar-SA';
-  rec.continuous = false;
-  
-  const btn = document.getElementById('micBtn');
-  btn.classList.add('recording');
-  document.getElementById('hint').textContent = 'Je vous écoute...';
-  
-  rec.onresult = e => {
-    const text = [...e.results].map(r => r[0].transcript).join('');
-    document.getElementById('transcriptText').textContent = 'VOUS: ' + text;
-    if (e.results[0].isFinal) {
-      rec.abort();
-      callGemini(text);
+  <div class="bottom-nav">
+    <div class="nav-item active" onclick="goHome()">
+      <div class="nav-item-icon">🏠</div>
+      <div id="navHome">Accueil</div>
+    </div>
+    <div class="nav-item" onclick="goLessons()">
+      <div class="nav-item-icon">📖</div>
+      <div id="navLessons">Leçons</div>
+    </div>
+    <div class="nav-item" onclick="goChat()">
+      <div class="nav-item-icon">💬</div>
+      <div id="navChat">Conversation</div>
+    </div>
+    <div class="nav-item" onclick="goProfile()">
+      <div class="nav-item-icon">👤</div>
+      <div id="navProfile">Profil</div>
+    </div>
+  </div>
+
+  <script>
+    const translations = {
+      fr: {
+        heroBadge: 'Kalam.me',
+        heroTitle: 'L\'APPRENTISSAGE EN ACTION',
+        heroSubtitle: 'Apprenez, pratiquez, progressez chaque jour',
+        welcomeTitle: 'Bienvenue',
+        welcomeSubtitle: 'Apprenez les langues avec l\'IA • 8 langues disponibles',
+        feature1Title: 'Discutez avec votre professeur IA',
+        feature1Text: 'Dialoguez naturellement et améliorez votre fluidité',
+        feature2Title: 'Des leçons adaptées à votre niveau',
+        feature2Text: 'Contenus personnalisés pour progresser à votre rythme',
+        feature3Title: '8 langues disponibles',
+        feature3Text: 'Apprenez parmi 8 langues différentes',
+        btnStart: 'Commencer mon apprentissage',
+        navHome: 'Accueil',
+        navLessons: 'Leçons',
+        navChat: 'Conversation',
+        navProfile: 'Profil'
+      },
+      en: {
+        heroBadge: 'Kalam.me',
+        heroTitle: 'LEARNING IN ACTION',
+        heroSubtitle: 'Learn, practice, progress every day',
+        welcomeTitle: 'Welcome',
+        welcomeSubtitle: 'Learn languages with AI • 8 languages available',
+        feature1Title: 'Chat with your AI teacher',
+        feature1Text: 'Speak naturally and improve your fluency',
+        feature2Title: 'Lessons adapted to your level',
+        feature2Text: 'Personalized content to progress at your pace',
+        feature3Title: '8 available languages',
+        feature3Text: 'Learn from 8 different languages',
+        btnStart: 'Start my learning',
+        navHome: 'Home',
+        navLessons: 'Lessons',
+        navChat: 'Chat',
+        navProfile: 'Profile'
+      },
+      ar: {
+        heroBadge: 'Kalam.me',
+        heroTitle: 'التعلم في العمل',
+        heroSubtitle: 'تعلم، تدرب، تقدم كل يوم',
+        welcomeTitle: 'أهلا وسهلا',
+        welcomeSubtitle: 'تعلم اللغات مع الذكاء الاصطناعي • 8 لغات متاحة',
+        feature1Title: 'تحدث مع أستاذك الذكي',
+        feature1Text: 'تحدث بطبيعية وحسن طلاقتك',
+        feature2Title: 'دروس مخصصة لمستواك',
+        feature2Text: 'محتوى شخصي للتقدم بسرعتك الخاصة',
+        feature3Title: '8 لغات متاحة',
+        feature3Text: 'تعلم من 8 لغات مختلفة',
+        btnStart: 'ابدأ تعلمي',
+        navHome: 'الصفحة الرئيسية',
+        navLessons: 'الدروس',
+        navChat: 'المحادثة',
+        navProfile: 'الملف الشخصي'
+      }
+    };
+
+    function changeLang(lang) {
+      document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      const t = translations[lang];
+      document.getElementById('heroTitle').textContent = t.heroTitle;
+      document.getElementById('heroSubtitle').textContent = t.heroSubtitle;
+      document.getElementById('welcomeTitle').textContent = t.welcomeTitle;
+      document.getElementById('welcomeSubtitle').textContent = t.welcomeSubtitle;
+      document.getElementById('feature1Title').textContent = t.feature1Title;
+      document.getElementById('feature1Text').textContent = t.feature1Text;
+      document.getElementById('feature2Title').textContent = t.feature2Title;
+      document.getElementById('feature2Text').textContent = t.feature2Text;
+      document.getElementById('feature3Title').textContent = t.feature3Title;
+      document.getElementById('feature3Text').textContent = t.feature3Text;
+      document.getElementById('btnStart').textContent = t.btnStart;
+      document.getElementById('navHome').textContent = t.navHome;
+      document.getElementById('navLessons').textContent = t.navLessons;
+      document.getElementById('navChat').textContent = t.navChat;
+      document.getElementById('navProfile').textContent = t.navProfile;
     }
-  };
-  
-  rec.onend = () => {
-    btn.classList.remove('recording');
-  };
-  
-  rec.start();
-}
 
-async function callGemini(studentText) {
-  document.getElementById('status').textContent = '🤖 Gemini réfléchit...';
-  
-  try {
-    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + API_KEY, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        systemInstruction: {
-          parts: [{
-            text: `Tu es Abou Adam, professeur d'arabe littéraire.
-Leçon: ${currentLesson?.title || 'Arabe'}
-Parle UNIQUEMENT en arabe littéraire, puis traduction FR.
-Sois bienveillant. 1-2 phrases max.
-Corrige la prononciation gentiment.`
-          }]
-        },
-        contents: [{
-          parts: [{ text: studentText || 'Salut' }]
-        }],
-        generationConfig: {
-          temperature: 0.7,
-          maxOutputTokens: 150
-        }
-      })
-    });
-    
-    const data = await response.json();
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Bravo! Continuons!';
-    
-    document.getElementById('transcriptText').textContent = reply;
-    document.getElementById('status').textContent = '';
-    speak(reply);
-  } catch (e) {
-    document.getElementById('transcriptText').textContent = '❌ Erreur: ' + e.message;
-  }
-}
+    function startApp() {
+      alert('🚀 Démarrage de Kalam.me!');
+    }
 
-try {
-  if (window.speechSynthesis?.onvoiceschanged !== undefined) {
-    window.speechSynthesis.onvoiceschanged = () => {};
-  }
-} catch (e) {}
-</script>
+    function goHome() {
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+      event.target.closest('.nav-item').classList.add('active');
+    }
+
+    function goLessons() {
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+      event.target.closest('.nav-item').classList.add('active');
+    }
+
+    function goChat() {
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+      event.target.closest('.nav-item').classList.add('active');
+    }
+
+    function goProfile() {
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+      event.target.closest('.nav-item').classList.add('active');
+    }
+  </script>
 </body>
 </html>
