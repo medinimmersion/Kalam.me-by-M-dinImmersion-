@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalam.me - Apprenez une langue en parlant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(180deg, #F5F1E8 0%, #FAFAF8 100%);
+      color: #1B5E39;
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: 60px;
+    }
+
+    .app-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(245,241,232,0.96) 100%);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(27, 94, 57, 0.08);
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(27, 94, 57, 0.06);
+    }
+
+    .header-branding { display: flex; align-items: center; gap: 12px; flex: 1; }
+
+    .medin-logo {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 600; color: #0F5A43; white-space: nowrap;
+    }
+
+    .medin-logo img { height: 24px; width: auto; }
+
+    .header-badge {
+      background: linear-gradient(135deg, #D4AF37 0%, #DAA520 100%);
+      color: #0F5A43;
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      box-shadow: 0 3px 10px rgba(212, 175, 55, 0.15);
+      display: flex; align-items: center; gap: 6px; white-space: nowrap;
+    }
+
+    .lang-selector { display: flex; gap: 6px; margin-left: auto; }
+
+    .lang-btn {
+      padding: 7px 12px;
+      border: 1.5px solid rgba(15, 90, 67, 0.25);
+      background: white;
+      color: #0F5A43;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 700;
+      font-family: 'Baloo 2', sans-serif;
+      transition: all 0.15s ease;
+      box-shadow: 0 2px 0 rgba(15, 90, 67, 0.15);
+    }
+
+    .lang-btn.active {
+      background: linear-gradient(135deg, #0F5A43 0%, #157A5B 100%);
+      color: white;
+      border-color: #0F5A43;
+      box-shadow: 0 2px 0 #0A3D2E, 0 3px 8px rgba(15, 90, 67, 0.3);
+    }
+
+    .lang-btn:active { transform: translateY(2px); box-shadow: none; }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 70px 20px 20px;
+      min-height: 100vh;
+    }
+
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* ÉCRAN ACCUEIL */
+    .hero {
+      position: relative;
+      background: linear-gradient(135deg, #F5F1E8 0%, #FAFAF8 100%);
+      border-radius: 20px;
+      padding: 30px 20px 45px;
+      margin-bottom: 20px;
+      min-height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      height: 25px;
+      background: #0F5A43;
+      clip-path: polygon(0 60%, 100% 0%, 100% 100%, 0% 100%);
+      z-index: 0;
+    }
+
+    .hero-character { flex: 0 0 35%; text-align: center; position: relative; z-index: 2; }
+    .hero-character img { width: 100%; height: auto; max-width: 150px; border-radius: 16px; }
+    .hero-content { flex: 1; padding-left: 20px; position: relative; z-index: 2; }
+
+    .logo-km {
+      width: 100px; height: 100px;
+      background: linear-gradient(135deg, #D4AF37 0%, #DAA520 100%);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 50px;
+      font-family: 'Baloo 2', sans-serif;
+      color: #0F5A43;
+      font-weight: 800;
+      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.2);
+      margin: 0 auto 15px;
+    }
+
+    .hero-title {
+      font-size: 22px;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 800;
+      color: #0F5A43;
+      text-align: center;
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+
+    .hero-subtitle { font-size: 13px; color: #8D9691; text-align: center; line-height: 1.5; }
+
+    .welcome-card {
+      background: white;
+      border-radius: 24px;
+      padding: 30px 20px;
+      margin: 30px 0 20px;
+      box-shadow: 0 8px 30px rgba(27, 94, 57, 0.12);
+      text-align: center;
+      border-top: 8px solid #0F5A43;
+    }
+
+    .welcome-title {
+      font-size: 24px;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 800;
+      color: #0F5A43;
+      margin-bottom: 8px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+
+    .welcome-subtitle { font-size: 14px; color: #8D9691; margin-bottom: 25px; line-height: 1.6; }
+
+    .features { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 25px; }
+
+    .feature {
+      background: linear-gradient(180deg, #FDFCFA 0%, #F5F1E8 100%);
+      padding: 20px 12px;
+      border-radius: 18px;
+      border: 1.5px solid rgba(15, 90, 67, 0.1);
+      text-align: center;
+      transition: all 0.2s ease;
+      box-shadow: 0 3px 0 rgba(15, 90, 67, 0.08);
+    }
+
+    .feature:active { transform: translateY(3px); box-shadow: none; border-color: rgba(212, 175, 55, 0.5); }
+
+    .feature-icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+      width: 60px; height: 60px;
+      background: rgba(15, 90, 67, 0.05);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      margin-left: auto; margin-right: auto;
+    }
+
+    .feature-title { font-size: 14px; font-weight: 700; color: #0F5A43; font-family: 'Baloo 2', sans-serif; margin-bottom: 8px; }
+    .feature-text { font-size: 12px; color: #8D9691; line-height: 1.4; }
+
+    .btn-primary {
+      width: 100%;
+      padding: 18px 24px;
+      background: linear-gradient(135deg, #0F5A43 0%, #157A5B 50%, #0F5A43 100%);
+      color: white;
+      border: 2px solid rgba(212, 175, 55, 0.4);
+      border-radius: 50px;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 17px;
+      cursor: pointer;
+      margin: 20px 0;
+      box-shadow: 0 4px 12px rgba(15, 90, 67, 0.3);
+      transition: all 0.15s ease;
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      position: relative;
+      overflow: hidden;
+      letter-spacing: 0.3px;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+      animation: shine 3s ease-in-out infinite;
+    }
+
+    @keyframes shine { 0% { left: -100%; } 50%, 100% { left: 150%; } }
+
+    .btn-primary:active { transform: scale(0.97); box-shadow: 0 2px 6px rgba(15, 90, 67, 0.25); }
+
+    .btn-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, #D4AF37 0%, #DAA520 100%);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      flex-shrink: 0;
+    }
+
+    /* ÉCRAN LEÇONS */
+    .screen-title {
+      margin: 20px 0;
+      font-size: 22px;
+      color: #0F5A43;
+      font-family: 'Baloo 2', sans-serif;
+    }
+
+    .lessons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+
+    .lesson-card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(27, 94, 57, 0.1);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 2px solid transparent;
+      position: relative;
+    }
+
+    .lesson-card:active { transform: translateY(-3px); border-color: #D4AF37; box-shadow: 0 6px 20px rgba(27, 94, 57, 0.15); }
+
+    .lesson-card.done { border-color: #0F5A43; }
+
+    .lesson-check {
+      position: absolute;
+      top: 10px; right: 10px;
+      width: 24px; height: 24px;
+      background: #0F5A43;
+      color: white;
+      border-radius: 50%;
+      display: none;
+      align-items: center; justify-content: center;
+      font-size: 13px;
+    }
+
+    .lesson-card.done .lesson-check { display: flex; }
+
+    .lesson-icon { font-size: 32px; margin-bottom: 10px; }
+    .lesson-title { font-size: 14px; font-weight: 700; color: #0F5A43; margin-bottom: 6px; }
+    .lesson-desc { font-size: 12px; color: #8D9691; line-height: 1.4; }
+
+    /* ÉCRAN OUSTAZ ANIMÉ */
+    .oustaz-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 500px;
+      padding: 30px 20px;
+      position: relative;
+    }
+
+    .character-wrapper {
+      position: relative;
+      width: 280px; height: 400px;
+      margin-bottom: 30px;
+      perspective: 1000px;
+    }
+
+    .character-container {
+      position: relative;
+      width: 100%; height: 100%;
+      transform-style: preserve-3d;
+    }
+
+    .character-img {
+      width: 100%; height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 20px rgba(15,90,67,0.2));
+    }
+
+    .character-container.speaking { /* Video plays - no CSS animation needed */ }
+
+    .character-container.listening { /* Video paused - no CSS animation needed */ }
+
+    .eyes-overlay {
+      position: absolute;
+      top: 35%; left: 50%;
+      transform: translateX(-50%);
+      width: 60px; height: 20px;
+      display: flex; justify-content: space-between; gap: 30px;
+      z-index: 10;
+    }
+
+    .eye {
+      width: 12px; height: 12px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 50%;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .eye.blink-open { opacity: 1; }
+
+    .mouth-overlay {
+      position: absolute;
+      width: 32px; height: 20px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 50%;
+      top: 52%; left: 50%;
+      transform: translateX(-50%);
+      transition: all 0.1s ease;
+      opacity: 0;
+      z-index: 10;
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+
+    .mouth-overlay.speaking {
+      opacity: 1;
+      height: 28px;
+      top: 50%;
+      width: 36px;
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .transcript-area {
+      width: 100%;
+      text-align: center;
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 10px;
+    }
+
+    .transcript-arabic { font-size: 20px; line-height: 1.6; color: #1B5E39; font-weight: 600; direction: rtl; }
+    .transcript-french { font-size: 16px; line-height: 1.5; color: #8D9691; }
+
+    .voice-controls { text-align: center; margin: 30px 0 20px; }
+
+    .mic-big {
+      width: 88px; height: 88px;
+      border-radius: 50%;
+      border: none;
+      background: linear-gradient(135deg, #D4AF37 0%, #DAA520 100%);
+      font-size: 38px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.45);
+      transition: all 0.15s;
+    }
+
+    .mic-big:active { transform: scale(0.93); }
+
+    .mic-big.recording {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      animation: mic-pulse 1s infinite;
+    }
+
+    @keyframes mic-pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.5); }
+      50% { box-shadow: 0 0 0 18px rgba(239,68,68,0); }
+    }
+
+    .mic-hint { font-size: 13px; color: #8D9691; margin-top: 10px; font-weight: 600; }
+
+    .btn-replay {
+      width: 100%;
+      padding: 13px;
+      background: white;
+      color: #0F5A43;
+      border: 1.5px solid rgba(15, 90, 67, 0.25);
+      border-radius: 50px;
+      font-family: 'Baloo 2', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    .btn-replay:active { transform: scale(0.97); }
+
+    /* ÉCRAN PROFIL */
+    .profile-header { text-align: center; padding: 20px 0; }
+
+    .profile-avatar {
+      width: 130px; height: 130px;
+      border-radius: 50%;
+      margin: 0 auto 15px;
+      overflow: hidden;
+      border: 4px solid #D4AF37;
+      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+      background: white;
+    }
+
+    .profile-avatar img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: top;
+    }
+
+    .profile-name {
+      font-family: 'Baloo 2', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: #0F5A43;
+    }
+
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 20px 0; }
+
+    .stat-card {
+      background: white;
+      border-radius: 16px;
+      padding: 18px 10px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(27, 94, 57, 0.1);
+      border-top: 4px solid #D4AF37;
+    }
+
+    .stat-value {
+      font-family: 'Baloo 2', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: #0F5A43;
+    }
+
+    .stat-label { font-size: 11px; color: #8D9691; margin-top: 4px; line-height: 1.3; }
+
+    .progress-section {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      margin: 20px 0;
+      box-shadow: 0 4px 15px rgba(27, 94, 57, 0.1);
+    }
+
+    .progress-title { font-family: 'Baloo 2', sans-serif; font-weight: 700; color: #0F5A43; margin-bottom: 12px; }
+
+    .progress-bar {
+      width: 100%;
+      height: 16px;
+      background: #F5F1E8;
+      border-radius: 50px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0F5A43, #D4AF37);
+      border-radius: 50px;
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+
+    .progress-percent { text-align: right; font-size: 13px; color: #8D9691; margin-top: 6px; font-weight: 600; }
+
+    /* NAVIGATION */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 60px;
+      background: white;
+      border-top: 1px solid rgba(27, 94, 57, 0.08);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      color: #8D9691;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .nav-item.active { color: #0F5A43; }
+    .nav-item-icon { font-size: 24px; }
+  </style>
+</head>
+<body>
+  <div class="app-header">
+    <div class="header-branding">
+      <div class="medin-logo">
+        <span>by</span>
+        <img src="logo-medin.png" alt="Médin Immersion">
+      </div>
+      <div class="header-badge">
+        <span>✨</span>
+        <span>Kalam.me</span>
+        <span>✨</span>
+      </div>
+    </div>
+    <div class="lang-selector">
+      <button class="lang-btn active" id="langFr" onclick="changeLang('fr')">FR</button>
+      <button class="lang-btn" id="langEn" onclick="changeLang('en')">EN</button>
+      <button class="lang-btn" id="langAr" onclick="changeLang('ar')">AR</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- ÉCRAN ACCUEIL -->
+    <div class="screen active" id="homeScreen">
+      <div class="hero">
+        <div class="hero-character">
+          <img src="oustaz.png" alt="Oustaz">
+        </div>
+        <div class="hero-content">
+          <div class="logo-km">KM</div>
+          <div class="hero-title" id="heroTitle">L'APPRENTISSAGE EN ACTION</div>
+          <div class="hero-subtitle" id="heroSubtitle">Apprenez, pratiquez, progressez chaque jour</div>
+        </div>
+      </div>
+
+      <div class="welcome-card">
+        <div class="welcome-title">
+          <span>✨</span>
+          <span id="welcomeTitle">Bienvenue</span>
+          <span>✨</span>
+        </div>
+        <div class="welcome-subtitle" id="welcomeSubtitle">
+          Apprenez les langues avec l'IA • 8 langues disponibles
+        </div>
+        
+        <div class="features">
+          <div class="feature">
+            <div class="feature-icon">🎤</div>
+            <div class="feature-title" id="feature1Title">Discutez avec votre professeur IA</div>
+            <div class="feature-text" id="feature1Text">Dialoguez naturellement et améliorez votre fluidité</div>
+          </div>
+          <div class="feature">
+            <div class="feature-icon">📚</div>
+            <div class="feature-title" id="feature2Title">Des leçons adaptées à votre niveau</div>
+            <div class="feature-text" id="feature2Text">Contenus personnalisés pour progresser à votre rythme</div>
+          </div>
+          <div class="feature">
+            <div class="feature-icon">🌍</div>
+            <div class="feature-title" id="feature3Title">8 langues disponibles</div>
+            <div class="feature-text" id="feature3Text">Apprenez parmi 8 langues différentes</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="goToLessons()">
+        <div class="btn-icon">✨</div>
+        <span id="btnStart">Commencer mon apprentissage</span>
+        <div class="btn-icon">→</div>
+      </button>
+    </div>
+
+    <!-- ÉCRAN LEÇONS -->
+    <div class="screen" id="lessonsScreen">
+      <h2 class="screen-title"><span>📚</span> <span id="lessonsTitle">Leçons</span></h2>
+      
+      <div class="lessons-grid">
+        <div class="lesson-card" id="lessonCard1" onclick="openLesson(1)">
+          <div class="lesson-check">✓</div>
+          <div class="lesson-icon">👋</div>
+          <div class="lesson-title" id="lesson1Title">Salutations</div>
+          <div class="lesson-desc" id="lesson1Desc">Apprenez les bases</div>
+        </div>
+        
+        <div class="lesson-card" id="lessonCard2" onclick="openLesson(2)">
+          <div class="lesson-check">✓</div>
+          <div class="lesson-icon">👤</div>
+          <div class="lesson-title" id="lesson2Title">Présentation</div>
+          <div class="lesson-desc" id="lesson2Desc">Parlez de vous</div>
+        </div>
+
+        <div class="lesson-card" id="lessonCard3" onclick="openLesson(3)">
+          <div class="lesson-check">✓</div>
+          <div class="lesson-icon">🔢</div>
+          <div class="lesson-title" id="lesson3Title">Nombres</div>
+          <div class="lesson-desc" id="lesson3Desc">1 à 10</div>
+        </div>
+
+        <div class="lesson-card" id="lessonCard4" onclick="openLesson(4)">
+          <div class="lesson-check">✓</div>
+          <div class="lesson-icon">🍽️</div>
+          <div class="lesson-title" id="lesson4Title">Nourriture</div>
+          <div class="lesson-desc" id="lesson4Desc">Au restaurant</div>
+        </div>
+
+        <div class="lesson-card" id="lessonCard5" onclick="openLesson(5)">
+          <div class="lesson-check">✓</div>
+          <div class="lesson-icon">🎨</div>
+          <div class="lesson-title" id="lesson5Title">Couleurs</div>
+          <div class="lesson-desc" id="lesson5Desc">Les couleurs de base</div>
+        </div>
+
+        <div class="lesson-card" id="lessonCard6" onclick="openLesson(6)">
+          <div class="lesson-check">✓</div>
+          <div class="lesson-icon">👨‍👩‍👧</div>
+          <div class="lesson-title" id="lesson6Title">Famille</div>
+          <div class="lesson-desc" id="lesson6Desc">Les membres de la famille</div>
+        </div>
+
+        <div class="lesson-card" id="lessonCard7" onclick="openLesson(7)">
+          <div class="lesson-check">✓</div>
+          <div class="lesson-icon">📅</div>
+          <div class="lesson-title" id="lesson7Title">Les jours</div>
+          <div class="lesson-desc" id="lesson7Desc">Jours de la semaine</div>
+        </div>
+
+        <div class="lesson-card" id="lessonCard8" onclick="openLesson(8)">
+          <div class="lesson-check">✓</div>
+          <div class="lesson-icon">🕌</div>
+          <div class="lesson-title" id="lesson8Title">À la mosquée</div>
+          <div class="lesson-desc" id="lesson8Desc">Vocabulaire religieux</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ÉCRAN OUSTAZ ANIMÉ -->
+    <div class="screen" id="chatScreen">
+      <div class="oustaz-stage">
+        <h2 style="font-size: 20px; color: #0F5A43; margin-bottom: 20px; font-family: 'Baloo 2', sans-serif;" id="chatTitle">Oustaz Abou Adam</h2>
+        <div class="character-wrapper">
+          <div class="character-container" id="charContainer">
+            <video id="oustazVideo" src="oustaz-speaking.mp4" class="character-img" muted playsinline loop></video>
+          </div>
+        </div>
+
+        <div class="transcript-area">
+          <div class="transcript-arabic" id="arabicText">السلام عليكم</div>
+          <div class="transcript-french" id="frenchText">Bonjour!</div>
+        </div>
+
+        <div class="voice-controls">
+          <button class="mic-big" id="micBtn" onclick="toggleMicrophone()">
+            <span id="micIcon">🎤</span>
+          </button>
+          <div class="mic-hint" id="micHint">Appuie et parle</div>
+        </div>
+
+        <button class="btn-replay" id="btnReplay" onclick="replayOustaz()">🔊 Réécouter</button>
+      </div>
+    </div>
+
+    <!-- ÉCRAN PROFIL -->
+    <div class="screen" id="profileScreen">
+      <div class="profile-header">
+        <div class="profile-avatar">
+          <img src="oustaz.png" alt="Avatar">
+        </div>
+        <div class="profile-name" id="profileName">Mon Profil</div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="statLessons">0</div>
+          <div class="stat-label" id="statLessonsLabel">Leçons terminées</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="statPhrases">0</div>
+          <div class="stat-label" id="statPhrasesLabel">Phrases parlées</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="statDays">0</div>
+          <div class="stat-label" id="statDaysLabel">Jours actifs</div>
+        </div>
+      </div>
+
+      <div class="progress-section">
+        <div class="progress-title" id="progressTitle">📈 Progression globale</div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-percent" id="progressPercent">0%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-item active" onclick="showHome()">
+      <div class="nav-item-icon">🏠</div>
+      <div id="navHome">Accueil</div>
+    </div>
+    <div class="nav-item" onclick="showLessons()">
+      <div class="nav-item-icon">📖</div>
+      <div id="navLessons">Leçons</div>
+    </div>
+    <div class="nav-item" onclick="showChat()">
+      <div class="nav-item-icon">💬</div>
+      <div id="navChat">Chat</div>
+    </div>
+    <div class="nav-item" onclick="showProfile()">
+      <div class="nav-item-icon">👤</div>
+      <div id="navProfile">Profil</div>
+    </div>
+  </div>
+
+  <script>
+    let currentLesson = null;
+    let currentLang = 'fr';
+    let isRecording = false;
+    let lastOustazArabic = '';
+    let lastOustazFrench = '';
+    let animationFrameId = null;
+    const TOTAL_LESSONS = 8;
+    const GEMINI_API_KEY = 'AQ.Ab8RN6I_U7pAy2ZL6VY2f_nKHiawfWuoMjTbgdpT2rmF6IKsGA';
+
+    /* ============ PROGRESSION (SAUVEGARDÉE) ============ */
+    function loadProgress() {
+      try {
+        return JSON.parse(localStorage.getItem('kalam_progress')) || { lessonsDone: [], phrases: 0, days: [] };
+      } catch(e) {
+        return { lessonsDone: [], phrases: 0, days: [] };
+      }
+    }
+
+    function saveProgress(p) {
+      try { localStorage.setItem('kalam_progress', JSON.stringify(p)); } catch(e) {}
+    }
+
+    function markLessonDone(id) {
+      const p = loadProgress();
+      if (!p.lessonsDone.includes(id)) {
+        p.lessonsDone.push(id);
+      }
+      markActiveToday(p);
+      saveProgress(p);
+      refreshLessonChecks();
+    }
+
+    function addPhrase() {
+      const p = loadProgress();
+      p.phrases++;
+      markActiveToday(p);
+      saveProgress(p);
+    }
+
+    function markActiveToday(p) {
+      const today = new Date().toISOString().slice(0, 10);
+      if (!p.days.includes(today)) p.days.push(today);
+    }
+
+    function refreshLessonChecks() {
+      const p = loadProgress();
+      for (let i = 1; i <= TOTAL_LESSONS; i++) {
+        const card = document.getElementById('lessonCard' + i);
+        if (card) card.classList.toggle('done', p.lessonsDone.includes(i));
+      }
+    }
+
+    function refreshProfile() {
+      const p = loadProgress();
+      document.getElementById('statLessons').textContent = p.lessonsDone.length;
+      document.getElementById('statPhrases').textContent = p.phrases;
+      document.getElementById('statDays').textContent = p.days.length;
+      const percent = Math.round((p.lessonsDone.length / TOTAL_LESSONS) * 100);
+      document.getElementById('progressFill').style.width = percent + '%';
+      document.getElementById('progressPercent').textContent = percent + '%';
+    }
+
+    /* ============ TRADUCTIONS (TOUTES LES PAGES) ============ */
+    const translations = {
+      fr: {
+        heroTitle: 'L\'APPRENTISSAGE EN ACTION',
+        heroSubtitle: 'Apprenez, pratiquez, progressez chaque jour',
+        welcomeTitle: 'Bienvenue',
+        welcomeSubtitle: 'Apprenez les langues avec l\'IA • 8 langues disponibles',
+        feature1Title: 'Discutez avec votre professeur IA',
+        feature1Text: 'Dialoguez naturellement et améliorez votre fluidité',
+        feature2Title: 'Des leçons adaptées à votre niveau',
+        feature2Text: 'Contenus personnalisés pour progresser à votre rythme',
+        feature3Title: '8 langues disponibles',
+        feature3Text: 'Apprenez parmi 8 langues différentes',
+        btnStart: 'Commencer mon apprentissage',
+        lessonsTitle: 'Leçons',
+        lesson1Title: 'Salutations', lesson1Desc: 'Apprenez les bases',
+        lesson2Title: 'Présentation', lesson2Desc: 'Parlez de vous',
+        lesson3Title: 'Nombres', lesson3Desc: '1 à 10',
+        lesson4Title: 'Nourriture', lesson4Desc: 'Au restaurant',
+        lesson5Title: 'Couleurs', lesson5Desc: 'Les couleurs de base',
+        lesson6Title: 'Famille', lesson6Desc: 'Les membres de la famille',
+        lesson7Title: 'Les jours', lesson7Desc: 'Jours de la semaine',
+        lesson8Title: 'À la mosquée', lesson8Desc: 'Vocabulaire religieux',
+        chatTitle: 'Oustaz Abou Adam',
+        micHint: 'Appuie et parle',
+        micListening: 'Je t\'écoute...',
+        micRetry: 'Réessaie...',
+        btnReplay: '🔊 Réécouter',
+        thinking: 'Je réfléchis...',
+        profileName: 'Mon Profil',
+        statLessonsLabel: 'Leçons terminées',
+        statPhrasesLabel: 'Phrases parlées',
+        statDaysLabel: 'Jours actifs',
+        progressTitle: '📈 Progression globale',
+        navHome: 'Accueil',
+        navLessons: 'Leçons',
+        navChat: 'Chat',
+        navProfile: 'Profil'
+      },
+      en: {
+        heroTitle: 'LEARNING IN ACTION',
+        heroSubtitle: 'Learn, practice, progress every day',
+        welcomeTitle: 'Welcome',
+        welcomeSubtitle: 'Learn languages with AI • 8 languages available',
+        feature1Title: 'Chat with your AI teacher',
+        feature1Text: 'Speak naturally and improve your fluency',
+        feature2Title: 'Lessons adapted to your level',
+        feature2Text: 'Personalized content to progress at your pace',
+        feature3Title: '8 available languages',
+        feature3Text: 'Learn from 8 different languages',
+        btnStart: 'Start my learning',
+        lessonsTitle: 'Lessons',
+        lesson1Title: 'Greetings', lesson1Desc: 'Learn the basics',
+        lesson2Title: 'Introduce yourself', lesson2Desc: 'Talk about you',
+        lesson3Title: 'Numbers', lesson3Desc: '1 to 10',
+        lesson4Title: 'Food', lesson4Desc: 'At the restaurant',
+        lesson5Title: 'Colors', lesson5Desc: 'Basic colors',
+        lesson6Title: 'Family', lesson6Desc: 'Family members',
+        lesson7Title: 'Days', lesson7Desc: 'Days of the week',
+        lesson8Title: 'At the mosque', lesson8Desc: 'Religious vocabulary',
+        chatTitle: 'Oustaz Abou Adam',
+        micHint: 'Tap and speak',
+        micListening: 'I\'m listening...',
+        micRetry: 'Try again...',
+        btnReplay: '🔊 Replay',
+        thinking: 'Thinking...',
+        profileName: 'My Profile',
+        statLessonsLabel: 'Lessons completed',
+        statPhrasesLabel: 'Phrases spoken',
+        statDaysLabel: 'Active days',
+        progressTitle: '📈 Overall progress',
+        navHome: 'Home',
+        navLessons: 'Lessons',
+        navChat: 'Chat',
+        navProfile: 'Profile'
+      },
+      ar: {
+        heroTitle: 'التعلم في العمل',
+        heroSubtitle: 'تعلم، تدرب، تقدم كل يوم',
+        welcomeTitle: 'أهلا وسهلا',
+        welcomeSubtitle: 'تعلم اللغات مع الذكاء الاصطناعي • 8 لغات متاحة',
+        feature1Title: 'تحدث مع أستاذك الذكي',
+        feature1Text: 'تحدث بطبيعية وحسن طلاقتك',
+        feature2Title: 'دروس مخصصة لمستواك',
+        feature2Text: 'محتوى شخصي للتقدم بسرعتك الخاصة',
+        feature3Title: '8 لغات متاحة',
+        feature3Text: 'تعلم من 8 لغات مختلفة',
+        btnStart: 'ابدأ تعلمي',
+        lessonsTitle: 'الدروس',
+        lesson1Title: 'التحيات', lesson1Desc: 'تعلم الأساسيات',
+        lesson2Title: 'التعريف بالنفس', lesson2Desc: 'تحدث عن نفسك',
+        lesson3Title: 'الأرقام', lesson3Desc: 'من 1 إلى 10',
+        lesson4Title: 'الطعام', lesson4Desc: 'في المطعم',
+        lesson5Title: 'الألوان', lesson5Desc: 'الألوان الأساسية',
+        lesson6Title: 'العائلة', lesson6Desc: 'أفراد العائلة',
+        lesson7Title: 'الأيام', lesson7Desc: 'أيام الأسبوع',
+        lesson8Title: 'في المسجد', lesson8Desc: 'مفردات دينية',
+        chatTitle: 'الأستاذ أبو آدم',
+        micHint: 'اضغط وتكلم',
+        micListening: 'أنا أستمع...',
+        micRetry: 'حاول مرة أخرى...',
+        btnReplay: '🔊 إعادة الاستماع',
+        thinking: 'أفكر...',
+        profileName: 'ملفي الشخصي',
+        statLessonsLabel: 'دروس مكتملة',
+        statPhrasesLabel: 'جمل منطوقة',
+        statDaysLabel: 'أيام نشطة',
+        progressTitle: '📈 التقدم العام',
+        navHome: 'الرئيسية',
+        navLessons: 'الدروس',
+        navChat: 'محادثة',
+        navProfile: 'الملف'
+      }
+    };
+
+    function changeLang(lang) {
+      currentLang = lang;
+      try { localStorage.setItem('kalam_lang', lang); } catch(e) {}
+
+      document.getElementById('langFr').classList.toggle('active', lang === 'fr');
+      document.getElementById('langEn').classList.toggle('active', lang === 'en');
+      document.getElementById('langAr').classList.toggle('active', lang === 'ar');
+      
+      const t = translations[lang];
+      Object.keys(t).forEach(key => {
+        const el = document.getElementById(key);
+        if (el) el.textContent = t[key];
+      });
+
+      document.body.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+    }
+
+    /* ============ NAVIGATION ============ */
+    function showScreen(screenId) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
+    }
+
+    function showHome() {
+      showScreen('homeScreen');
+      updateNav(0);
+      stopAllAnimations();
+    }
+
+    function goToLessons() { showLessons(); }
+
+    function showLessons() {
+      showScreen('lessonsScreen');
+      updateNav(1);
+      stopAllAnimations();
+      refreshLessonChecks();
+    }
+
+    function showChat() {
+      showScreen('chatScreen');
+      updateNav(2);
+      if (!currentLesson) {
+        currentLesson = 1;
+        setTimeout(() => speak('السلام عليكم', 'Bonjour!'), 400);
+      }
+    }
+
+    function showProfile() {
+      showScreen('profileScreen');
+      updateNav(3);
+      stopAllAnimations();
+      refreshProfile();
+    }
+
+    function updateNav(index) {
+      document.querySelectorAll('.nav-item').forEach((item, i) => {
+        item.classList.toggle('active', i === index);
+      });
+    }
+
+    /* ============ LEÇONS ============ */
+    const LESSON_INTROS = {
+      1: { ar: 'السلام عليكم', fr: 'Bonjour!' },
+      2: { ar: 'ما اسمك؟', fr: 'Quel est ton nom?' },
+      3: { ar: 'واحد، اثنان، ثلاثة', fr: 'Un, deux, trois' },
+      4: { ar: 'هل تحب الطعام؟', fr: 'Aimes-tu la nourriture?' },
+      5: { ar: 'ما لونك المفضل؟', fr: 'Quelle est ta couleur préférée?' },
+      6: { ar: 'هل لديك إخوة؟', fr: 'As-tu des frères et sœurs?' },
+      7: { ar: 'اليوم هو يوم الجمعة', fr: 'Aujourd\'hui c\'est vendredi' },
+      8: { ar: 'أين المسجد؟', fr: 'Où est la mosquée?' }
+    };
+
+    function openLesson(id) {
+      currentLesson = id;
+      markLessonDone(id);
+      showChat();
+      setTimeout(() => {
+        const intro = LESSON_INTROS[id] || LESSON_INTROS[1];
+        speak(intro.ar, intro.fr);
+      }, 400);
+    }
+
+    /* ============ ANIMATIONS ============ */
+    function stopAllAnimations() {
+      window.speechSynthesis.cancel();
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      const cc = document.getElementById('charContainer');
+      if (cc) cc.classList.remove('speaking', 'listening');
+      const m = document.getElementById('mouth');
+      if (m) m.classList.remove('speaking');
+      const video = document.getElementById('oustazVideo');
+      if (video) video.pause();
+    }
+
+    function animateCharacter() {
+      const charContainer = document.getElementById('charContainer');
+      const video = document.getElementById('oustazVideo');
+
+      if (window.speechSynthesis.speaking) {
+        charContainer.classList.add('speaking');
+        charContainer.classList.remove('listening');
+        
+        // Play video while Oustaz speaks
+        if (video && video.paused) {
+          video.currentTime = 0;
+          video.play().catch(e => console.log('Video play error:', e));
+        }
+        
+        animationFrameId = requestAnimationFrame(animateCharacter);
+      } else {
+        charContainer.classList.remove('speaking');
+        
+        // Pause video when done speaking
+        if (video) {
+          video.pause();
+          video.currentTime = 0;
+        }
+      }
+    }
+
+    /* ============ VOIX ============ */
+    function speak(arabicText, frenchText) {
+      lastOustazArabic = arabicText;
+      lastOustazFrench = frenchText;
+      document.getElementById('arabicText').textContent = arabicText;
+      document.getElementById('frenchText').textContent = frenchText;
+      
+      window.speechSynthesis.cancel();
+
+      const queue = [
+        { t: arabicText, lang: 'ar-SA' },
+        { t: frenchText, lang: 'fr-FR' }
+      ];
+
+      let i = 0;
+      const next = () => {
+        if (i >= queue.length) {
+          document.getElementById('charContainer').classList.remove('speaking');
+          return;
+        }
+        const u = new SpeechSynthesisUtterance(queue[i].t);
+        u.lang = queue[i].lang;
+        u.rate = 0.85;
+        u.onstart = () => animateCharacter();
+        u.onend = () => { i++; setTimeout(next, 300); };
+        u.onerror = () => { i++; next(); };
+        window.speechSynthesis.speak(u);
+      };
+      next();
+    }
+
+    function replayOustaz() {
+      speak(lastOustazArabic || 'السلام عليكم', lastOustazFrench || 'Bonjour!');
+    }
+
+    /* ============ GEMINI ============ */
+    async function askOustaz(userText) {
+      const t = translations[currentLang];
+      document.getElementById('arabicText').textContent = '...';
+      document.getElementById('frenchText').textContent = t.thinking;
+
+      try {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{
+                text: `Tu es Oustaz Abou Adam, professeur d'arabe. L'élève a dit: "${userText}". 
+Réponds en 1 phrase MAXIMUM. Format: une phrase en ARABE, puis sa traduction en FRANÇAIS.
+Pas d'emoji, pas de markdown, juste le texte.`
+              }]
+            }]
+          })
+        });
+
+        const data = await response.json();
+        let response_text = data.candidates?.[0]?.content?.parts?.[0]?.text || 'عفوا';
+        
+        const lines = response_text.split('\n').filter(l => l.trim());
+        const ar = lines[0] || 'عفوا';
+        const fr = lines[1] || 'Peux-tu répéter?';
+        
+        speak(ar, fr);
+      } catch (e) {
+        speak('عفوا', 'Erreur de connexion');
+      }
+    }
+
+    /* ============ MICRO ============ */
+    function toggleMicrophone() {
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SR) {
+        alert('Ton navigateur ne gère pas le micro. Utilise Chrome.');
+        return;
+      }
+
+      if (isRecording) return;
+
+      window.speechSynthesis.cancel();
+      const recognition = new SR();
+      recognition.lang = 'ar-SA';
+      recognition.interimResults = false;
+      const t = translations[currentLang];
+
+      recognition.onstart = () => {
+        isRecording = true;
+        document.getElementById('charContainer').classList.add('listening');
+        document.getElementById('charContainer').classList.remove('speaking');
+        const video = document.getElementById('oustazVideo');
+        if (video) video.pause();
+        document.getElementById('micBtn').classList.add('recording');
+        document.getElementById('micIcon').textContent = '⏹';
+        document.getElementById('micHint').textContent = t.micListening;
+      };
+
+      recognition.onresult = (e) => {
+        const said = e.results[0][0].transcript;
+        addPhrase();
+        askOustaz(said);
+      };
+
+      recognition.onerror = () => {
+        document.getElementById('micHint').textContent = t.micRetry;
+      };
+
+      recognition.onend = () => {
+        isRecording = false;
+        document.getElementById('charContainer').classList.remove('listening');
+        document.getElementById('micBtn').classList.remove('recording');
+        document.getElementById('micIcon').textContent = '🎤';
+        document.getElementById('micHint').textContent = t.micHint;
+      };
+
+      recognition.start();
+    }
+
+    /* ============ INITIALISATION ============ */
+    (function init() {
+      let savedLang = 'fr';
+      try { savedLang = localStorage.getItem('kalam_lang') || 'fr'; } catch(e) {}
+      changeLang(savedLang);
+      refreshLessonChecks();
+    })();
+  </script>
+</body>
+</html>
